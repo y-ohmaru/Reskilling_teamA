@@ -1,0 +1,43 @@
+package jp.co.kenfurni.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import jp.co.kenfurni.entity.Lineup;
+
+@Component
+public class LineupDAO {
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private PlatformTransactionManager transactionManager;
+
+	private RowMapper<Lineup> userMapper = new BeanPropertyRowMapper<Lineup>(Lineup.class);
+	
+	//全てのラインナップ情報を取得
+	public List<Lineup> getAllLineupList() {
+		// SQLを保持するPreparedStatementオブジェクトの生成
+		String sql = "SELECT * FROM lineup ";
+		try {
+			List<Lineup> lineupList = jdbcTemplate.query(sql, userMapper);
+			return lineupList;
+		} catch (EmptyResultDataAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+
+
+
+
+}

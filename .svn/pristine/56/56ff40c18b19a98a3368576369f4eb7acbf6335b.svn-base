@@ -1,0 +1,32 @@
+package jp.co.kenfurni.entity;
+
+public class Lineup {
+	private int id;
+	private int item_id;
+	private String seles;
+	private String renewal;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getItem_id() {
+		return item_id;
+	}
+	public void setItem_id(int item_id) {
+		this.item_id = item_id;
+	}
+	public String getSeles() {
+		return seles;
+	}
+	public void setSeles(String seles) {
+		this.seles = seles;
+	}
+	public String getRenewal() {
+		return renewal;
+	}
+	public void setRenewal(String renewal) {
+		this.renewal = renewal;
+	}
+}

@@ -1,0 +1,305 @@
+@charset "UTF-8";
+/*--------------------------------共通 --------------------------------*/
+/*テーブルの形式*/
+table{
+	border-collapse: collapse;
+}
+/*テーブルのデータ形式*/
+td{
+  padding:6px 10px;/*セル同士の間隔*/
+}
+/*背景色*/
+body{
+	background: #fcfcfc;
+}
+
+/*ボタン*/
+.buttonoption {
+	display: block;
+	padding: 10px;
+	margin: 10px;
+	box-sizing: border-box;
+	border: 1px solid #68779a;
+	background: #cbe8fa;
+	cursor: pointer;
+	text-align: center;
+}
+
+.buttonoption:hover {
+	background: #80c8f2;
+}
+
+/*エラーメッセージ*/
+.error{
+	color: #ff0000;
+}
+
+/*center*/
+.center{
+        margin: auto;
+    }
+
+/*画面名*/
+.title{
+	text-align:center;/*中央に表示*/
+}
+/*メインコンテンツ*/
+.main_container{
+    display: flex;
+    justify-content: center;
+}
+
+/*--------------------------------商品検索画面 itemSearch.jsp --------------------------------*/
+.search_container {
+	float: left;
+	width: 80%;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+}
+
+.search_lineup {
+	float: right;
+	width: 20%;
+}
+
+.search_lineup img {
+	width: 100%;
+}
+
+.search_tdoption {
+	line-height:0;
+}
+
+.search_tableoption {
+	padding: 5px;
+}
+.add-to-cart {
+	background-color: #e78f0f;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	border-radius: 5px;
+	text-decoration: none;
+	margin-top: 20px;
+}
+.add-to-cart:hover {
+	background-color: #bc8b0c;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	border-radius: 5px;
+	text-decoration: none;
+	margin-top: 20px;
+}
+.button_off{
+  background:none;
+  border: none;
+  font-size: 30px;
+}
+.button_off:hover{
+  background:none;
+  border: none;
+  font-size: 30px;
+  color:#0000a0;
+}
+.btn-border-bottom {
+  position: relative;
+  display: inline-block;
+  padding: 0.25em 0;
+  text-decoration: none;
+}
+.btn-border-bottom:before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 2px;
+  top:100%;
+  left: 0;
+  border-radius: 3px;
+  background:#808080;
+  transition: .2s;
+}
+
+.btn-border-bottom:hover:before {
+  top: -webkit-calc(100% - 3px);
+  top: calc(100% - 3px);
+  background:#000000;
+}
+/*--------------------------------商品詳細画面 itemDetail.jsp --------------------------------*/
+.detail_option1{
+	width: 80%;
+	margin: auto;
+	border: solid 1px #000000;
+}
+.detail_option2{
+	margin: auto;
+}
+.detail_option3{
+	float: right;
+    margin: 20px;
+}
+.detail_option4{
+	width: 80%;
+	margin: auto;
+}
+.detail_fontoption1{
+	font-size: 40px;
+}
+.detail_fontoption2{
+	font-size: 20px;
+}
+
+/*--------------------------------カート画面 cart.jsp --------------------------------*/
+.cart_option1 {
+	margin: auto;
+}
+
+.cart_option2 {
+	line-height:0;
+	padding: 5px;
+}
+
+.cart_option3 {
+	float: right;
+	margin: 5px;
+}
+
+.cart_option4 {
+	width: 60%;
+	text-align: center;
+
+}
+
+.cart_centered-table {
+	justify-content: center;
+	margin: 10px;
+}
+/*--------------------------------購入手続き画面 buy.jsp --------------------------------*/
+.buyForm {
+	float: left;
+	width: 60%;
+}
+
+.form-wrap {
+	overflow: auto;
+	white-space: nowrap;
+}
+
+.formName {
+	float: left;
+	width: 20%;
+	font-weight: bold;
+}
+
+.formInfo {
+	float: left;
+	padding: 0.5em 1em;
+	margin: 2em 0;
+	border: solid 2px #000000;
+	width: 60%;
+}
+
+.buyCart {
+	float: left;
+	padding: 0.5em 1em;
+	margin: 2em 0;
+	border: solid 2px #000000;
+}
+/*--------------------------------感謝画面 thankyou.jsp --------------------------------*/
+.thankyou-container {
+   text-align: center;
+    padding-top: 150px;
+}
+.thankyou_button {
+	float: right;
+	text-align: center;
+	padding-top: 80px;
+}
+/*--------------------------------ユーザー登録画面 userRegist.jsp --------------------------------*/
+/*--------------------------------ユーザー確認画面 userConfirm.jsp --------------------------------*/
+/*--------------------------------ユーザー編集画面 userEdit.jsp --------------------------------*/
+/*ログイン画面の入力フォーム*/
+.login_form{
+	position: relative;
+	top: 50px;
+	left: 600px;
+}
+/*ログイン画面のボタン*/
+.login_button{
+	position: relative;
+	top: 100px;
+	left:600px;
+}
+/*ユーザー情報系のフォームで使用*/
+.user_form{
+	position: relative;
+	left: 500px;
+}
+/*ユーザー情報系のエラーメッセージに設定*/
+.user_formError{
+	position: relative;
+	left: 500px;
+}
+/*ユーザー情報系のボタンで使用*/
+.user_button{
+	display: flex;
+	position: relative;
+	left:900px;
+}
+/*注意を促す文字に設定*/
+.font_caution{
+    color: red;
+}
+/*ユーザー情報系のエラーメッセージに設定*/
+.user_formError{
+	color: red;
+	position: relative!important;
+	left: 500px!important;
+}
+
+/*--------------------------------フッター画面 footer.jsp --------------------------------*/
+footer {
+	text-align: center;
+	width: 100%;
+	background-color: #FFEED5;
+	bottom: 0;
+	overflow: auto; /*下に固定*/
+}
+div.menu {
+	float: right;
+	padding: 2px;
+	margin: 2px;
+	bottom: 0; /*下に固定*/
+}
+.login_footer{
+    position: absolute;/*←絶対位置*/
+    bottom: 0; /*下に固定*/
+	text-align: center;
+	width: 100%;
+	background-color: #FFEED5;
+}
+/*--------------------------------ヘッダー画面 header.jsp --------------------------------*/
+.header {
+	overflow: auto;
+	width: 100%;
+	background-color: #FFEED5;
+}
+
+.headerLogo {
+	float: left;
+	padding: 2px;
+	margin: 2px;
+}
+
+.menu {
+	float: right;
+	padding: 2px;
+	margin: 2px;
+	bottom: 0; /*下に固定*/
+}
+a{
+    text-decoration: none;
+}

@@ -1,0 +1,44 @@
+package jp.co.kenfurni.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import jp.co.kenfurni.dao.ItemDAO;
+import jp.co.kenfurni.dao.LineupDAO;
+import jp.co.kenfurni.entity.Item;
+import jp.co.kenfurni.entity.Lineup;
+
+@Controller
+@RequestMapping("/emp")
+public class EmployeeController {
+
+	@Autowired
+	private ItemDAO itemDAO;
+	@Autowired
+	private LineupDAO lineupDAO;
+
+	//従業員ラインナップ登録画面表示
+	@RequestMapping(value = "/toRegist", method = RequestMethod.GET)
+	public String toEmpRegist(Model model) {
+		//DBからitemの全リストをセットするgetAllItemList
+		List<Item> itemList = itemDAO.getAllItemList();
+		//modelにitemListという名前で情報をセットする。
+		model.addAttribute("itemList", itemList);
+		return "lineupRegist";
+
+	}
+	@RequestMapping(value = "/Regist", method = RequestMethod.POST)
+	public String EmpRegist(@ModelAttribute Lineup lineup,Model model) {
+		List<Lineup> lineupList = new ArrayList<Lineup>();
+		model.addAttribute("lineupList",lineupList);
+
+		return "lineupRegist";
+	}
+}

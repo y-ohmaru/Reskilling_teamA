@@ -1,0 +1,102 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ショッピングカート</title>
+<link rel="stylesheet" href="/kenfurni/resources/Stylesheet2.css">
+</head>
+<script type="text/javascript">
+function selectChange(){
+	const selectElement = document.getElementById("area");
+	// 選択された数量を取得
+    const selectedCount = selectElement.value;
+ 	// 表示を更新
+    document.getElementById("current_count").textContent = selectedCount;
+
+    const form = document.querySelector('#change');
+    form.submit();
+	}
+</script>
+<link rel="stylesheet" href="/kenfurni/resources/stylesheet.css">
+</head>
+<body>
+	<jsp:include page="header.jsp"></jsp:include>
+			<h1 class="title">ショッピングカート</h1>
+	<main>
+		<div>
+			<c:out value="${message}" />
+			<br>
+		</div>
+		<c:forEach var="cart" items="${sessionScope.cartList}" varStatus="status">
+		<div class="cart_option2">
+			<table border="1" class="cart_option1">
+				<tr>
+					<td rowspan="3">
+						<c:out value="${status.index+1}" />
+					</td>
+				</tr>
+				<tr>
+				<form:form modelAttribute="item" action="${pageContext.request.contextPath}/buy/delete" method="post">
+					<td rowspan="3"><img src="http://localhost:8080/kenfurni/image/${cart.item.item_png}" alt="商品画像" height=200 width=200 /></td>
+					<td colspan="3" class="cart_option4"><c:out
+							value="${cart.item.item_name}" /></td>
+					<td>
+							<input type="submit" value="削除" class="cart_buttonoption" >
+							<form:hidden path="item_id" value="${cart.item.item_id}" />
+					</td>
+				</form:form>
+				</tr>
+				<tr>
+
+					<td>値段 <c:out value="${cart.item.item_price}" /></td>
+					<td>
+						 <p>現在の数量：<span id="current_count">${cart.count}</span></p>
+					</td>
+					<td>
+					<form:form  modelAttribute="item" id="change" action="${pageContext.request.contextPath}/buy/change" method="post">
+					<select name="count" id="area" onchange="selectChange()">
+							<c:forEach varStatus="status" begin="1" end="${cart.item.item_stock}">
+								<option value="${status.count}">${status.count}</option>
+							</c:forEach>
+					</select>
+					<form:hidden path="item_id" value="${cart.item.item_id}" />
+					</form:form>
+					</td>
+					<td>
+
+					</td>
+
+				</tr>
+			</table>
+		</div>
+		</c:forEach>
+		<div>
+			<table class="cart_option3">
+				<tr>
+					<td><a href="http://localhost:8080/kenfurni/item/search"><button class="cart_buttonoption">商品検索画面に戻る</button></a></td>
+				</tr>
+				<tr>
+					<td>
+					 <c:if test="${fn:length(sessionScope.cartList) == 0}">
+						<form action="../buy/procedure" method="post">
+							<input type="submit" disabled value="購入手続きへ進む" class="cart_buttonoption">
+						</form>
+					</c:if>
+					  <c:if test="${fn:length(sessionScope.cartList) > 0}">
+						<form action="../buy/procedure" method="post">
+							<input type="submit" value="購入手続きへ進む" class="cart_buttonoption">
+						</form>
+					</c:if>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</main>
+	<jsp:include page="footer.jsp"></jsp:include>
+</body>
+</html>

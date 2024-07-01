@@ -1,0 +1,275 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/kenfurni/resources/stylesheet.css">
+<title>購入手続き画面</title>
+<script type="text/javascript">
+let dt;
+	function buyConfirm() {
+		var result = window.confirm("購入しますか？");
+
+		if (result) {
+			window.alert("ご購入いただきありがとうございました。");
+		}
+	}
+
+	window.onload = function() {
+
+		dt = new Date();
+		//5日後
+		dt.setDate(dt.getDate() + 5);
+		var y = dt.getFullYear();
+		var m = dt.getMonth() +1;
+		var d = dt.getDate();
+		var today = y + "-" + m.toString().padStart(2,'0') + "-" + d.toString().padStart(2,'0');
+		document.getElementById("sendTypeInput").min = today;;
+		document.getElementById("sendTypeInput").value = today;
+    }
+
+	// ポイントに値が入ったとき
+	function rePoint(price) {
+		//要素の取得
+		var inputPoint = document.getElementById("inputPoint");
+		var pointError = document.getElementById("pointError");
+
+		if(isNaN(inputPoint.value)){
+			inputPoint.value = 0;
+			pointError.textContent  = "数値を入力してください。";
+			return;
+		}else if(inputPoint.value > ${loginUser.user_point}){
+			inputPoint.value = ${loginUser.user_point};
+			pointError.textContent  = "現在のポイントより少ないポイントを入力してください。";
+		}else{
+			pointError.textContent  = "";
+		}
+		var intInputPoint = parseInt(inputPoint.value);
+		// 更新
+		inputPoint.value = intInputPoint;
+
+		document.getElementById("outputPoint").textContent = '-\xA5' + intInputPoint.toLocaleString();
+		document.getElementById("outputPrice").textContent = '\xA5' + (price- intInputPoint+13500).toLocaleString();
+	}
+
+	function toggleTextBox(name, able){
+		var elem = document.getElementById(name+"Input");
+		if(able){
+			elem.disabled = false;
+		}else{
+			elem.disabled = true;
+		}
+	}
+
+	function inputCheck(){
+		var errorCount = 0;//エラーの数
+		//値の取得
+		var address = document.getElementById("address");
+		var addressError = document.getElementById("addressError");
+
+		//空文字チェック
+		if(address.value == ""){
+			addressError.textContent ="必須入力です";
+			errorCount++;
+		}else{
+			addressError.textContent ="";
+		}
+
+		var ArrDate = document.getElementById("ArrDate"); //着日指定ラジオボタン
+		var sendTypeInput = document.getElementById("sendTypeInput"); //着日の値
+		var sendDateError = document.getElementById("sendDateError");//着日エラー
+
+		//着日指定が選択されていたら、チェック
+		if(ArrDate.checked){
+			var date = new Date(sendTypeInput.value);
+			if(isNaN(date.getDate())){
+				sendDateError.textContent ="日付を正しく選択してください。";
+				errorCount++;
+			}else if(dt.getDate() > date.getDate()){
+				sendDateError.textContent ="5日以降を選択してください。";
+				errorCount++;
+			}else{
+				sendDateError.textContent ="";
+			}
+		}else{
+			sendDateError.textContent ="";
+		}
+
+		var credit = document.getElementById("credit");//クレジット選択
+		var payInput = document.getElementById("payInput"); //クレジットの値
+		var payError = document.getElementById("payError"); //クレジットエラー
+
+		//クレジットが選択されていたら、空チェック
+		if(credit.checked){
+			  // チェック条件パターン
+			  var pattern = /^[0-9]{14,16}$/;
+			if(!pattern.test(payInput.value)){
+				payError.textContent ="14-16桁の数値を入力してください。";
+				errorCount++;
+			}else{
+				payError.textContent ="";
+			}
+		}else{
+			payError.textContent ="";
+		}
+		//ポイントも確認
+		rePoint(price)
+
+		//入力チェック判定
+		if(errorCount == 0){
+			return window.confirm("購入を確定しますか？")
+		}else{
+			window.alert("正しく入力されていない項目が"+errorCount+"件あります");
+			return false;
+		}
+	}
+</script>
+</head>
+<body>
+	<jsp:include page="header.jsp"></jsp:include>
+	<h1 class="title" >購入手続き画面</h1>
+	<div class="buyForm">
+		<form:form action="./complete" method="post" modelAttribute="orderInfoModel">
+			<div class="form-wrap">
+				<div class="formName">発送先情報</div>
+				<div class="formInfo">
+					<table>
+						<tr>
+							<td></td>
+							<td><span class="error" id="addressError"></span></td>
+						</tr>
+						<tr>
+							<td>送り先</td>
+							<td><form:input id="address" path="address" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-wrap">
+				<div class="formName">発送方法選択</div>
+				<div class="formInfo">
+					<table>
+						<tr>
+							<td><label><form:radiobutton path="sendType"
+										name="sendType" label="通常配送" value="通常配送" checked="checked"
+										onclick="toggleTextBox('sendType',false)" /></label></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><label><form:radiobutton path="sendType"
+										id="ArrDate" name="sendType" label="着日指定" value="着日指定"
+										onclick="toggleTextBox('sendType',true)" /></label></td>
+							<td><form:input path="sendDate" type="date"
+									id="sendTypeInput" /> <span class="error" id="sendDateError"></span>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>※本日より5日以降が選択できます。</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-wrap">
+				<div class="formName">ポイント</div>
+				<div class="formInfo">
+					<table>
+						<tr>
+							<td>現在のポイント</td>
+							<td><c:out value="${loginUser.user_point}" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><span class="error" id="pointError"></span></td>
+						</tr>
+						<tr>
+							<td>使用するポイント</td>
+							<td><form:input path="usedPoint" value="0" id="inputPoint"
+									onchange="rePoint(${price})" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>※使用しない場合は0を入力してください。</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-wrap">
+				<div class="formName">支払方法選択</div>
+				<div class="formInfo">
+					<table>
+						<tr>
+							<td><label><form:radiobutton path="pay" name="pay"
+										label="代金引換" value="代金引換" checked="checked"
+										onclick="toggleTextBox('pay',false)" /></label></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><label><form:radiobutton path="pay" name="pay"
+										id="credit" label="クレジットカード" value="クレジットカード"
+										onclick="toggleTextBox('pay',true)" /></label></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><span class="error" id="payError"></span></td>
+						</tr>
+						<tr>
+							<td>カード番号</td>
+							<td><form:input id="payInput" path="cardNo" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<input type="submit" value="注文確定" onclick="return inputCheck()">
+		</form:form>
+	</div>
+	<div class="buyCart">
+		<h2>カート内総計</h2>
+		<table>
+			<c:forEach varStatus="status" var="cart"
+				items="${sessionScope.cartList}">
+				<tr>
+					<td><c:out value="${cart.item.item_name}" /></td>
+					<td><c:out value="${cart.count}" />個</td>
+					<td style="text-align:right">
+						 <span id="subtotal${status.index}"></span>
+						<script>
+						var price = ${cart.item.item_price * cart.count};
+						document.getElementById("subtotal"+${status.index}).textContent = '\xA5' + price.toLocaleString();
+						</script>
+					</td>
+				</tr>
+
+			</c:forEach>
+			<tr>
+				<td></td>
+				<td>送料</td>
+				<td style="text-align:right">\13,500</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>ポイント</td>
+				<td style="text-align:right">
+					<span id="outputPoint">-\0</span>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>支払総額</td>
+				<td style="text-align:right">
+					<span id="outputPrice"></span>
+					<script>
+						var price = ${price + 13500};
+						document.getElementById("outputPrice").textContent = '\xA5' + price.toLocaleString();
+					</script>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<jsp:include page="footer.jsp"></jsp:include>
+</body>
+</html>
