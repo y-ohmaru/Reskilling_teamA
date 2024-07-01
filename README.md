@@ -12,3 +12,5 @@
 Springフレーム（SpringMVC） ver 3.1.1
 
 MySQL(phpMyAdmin)
+作成メンバー
+所　前原　高橋　坂本　山田
